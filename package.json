@@ -4,7 +4,7 @@
   "description": "Simple and lightweight Boilerplate for ReactJS projects",
   "scripts": {
     "lint": "eslint --ext .jsx,.js src",
-    "start": "node server.js"
+    "start": "webpack && node ./server/bin/www"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
     "node": ">=6.0.0"
   },
   "devDependencies": {
+    "@types/express": "^4.0.39",
     "@types/node": "^8.0.47",
     "@types/react": "^16.0.19",
     "@types/react-dom": "^16.0.2",
@@ -51,8 +52,11 @@
     "webpack-dev-server": "2.3.0"
   },
   "dependencies": {
+    "@types/ws": "^3.2.0",
+    "express": "^4.16.2",
     "react": "15.4.2",
     "react-dom": "15.4.2",
-    "ts-loader": "^3.1.1"
+    "ts-loader": "^3.1.1",
+    "ws": "^3.2.0"
   }
 }
