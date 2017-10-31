@@ -17,6 +17,12 @@ let common = {
     },
     resolve: {
         extensions: ['', '.js', '.jsx', '.ts', '.tsx']
+    },
+    watch: true,
+    watchOptions: {
+        aggregateTimeout: 300,
+        poll: 1000,
+        ignored: /node_modules/
     }
 }
 

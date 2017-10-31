@@ -50,8 +50,18 @@ export class App extends React.Component<any, any> {
             <section>
             <Nav />
             <MessageList messages={this.state.messages} />
-            <ChatBar currentUser={this.state.currentUser} />
+            <ChatBar currentUser={this.state.currentUser} onSubmit={this._captureInputFromChat} />
             </section>
         );
+    }
+
+    _captureInputFromChat = (input: string) => {
+        this.setState((prevState: any) => {
+            prevState.messages.push({
+                username: this.state.currentUser,
+                content:  input,
+                key:      prevState.messages.length + 1
+            })
+        })
     }
 }

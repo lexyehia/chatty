@@ -4,7 +4,9 @@
   "description": "Simple and lightweight Boilerplate for ReactJS projects",
   "scripts": {
     "lint": "eslint --ext .jsx,.js src",
-    "start": "webpack && node ./server/bin/www"
+    "start": "npm-run-all --parallel watch:server watch:build",
+    "watch:build": "webpack",
+    "watch:server": "nodemon \"./server/bin/www\" --watch \"./server/bin\""
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,7 @@
     "@types/node": "^8.0.47",
     "@types/react": "^16.0.19",
     "@types/react-dom": "^16.0.2",
+    "@types/ws": "^3.2.0",
     "awesome-typescript-loader": "^3.2.3",
     "babel-core": "6.23.1",
     "babel-loader": "6.3.1",
@@ -43,6 +46,7 @@
     "eslint": "3.15.0",
     "eslint-plugin-react": "6.9.0",
     "node-sass": "4.5.0",
+    "npm-run-all": "^4.1.1",
     "sass-loader": "6.0.0",
     "sockjs-client": "^1.1.2",
     "source-map-loader": "^0.2.3",
@@ -52,8 +56,8 @@
     "webpack-dev-server": "2.3.0"
   },
   "dependencies": {
-    "@types/ws": "^3.2.0",
     "express": "^4.16.2",
+    "nodemon": "^1.12.1",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "ts-loader": "^3.1.1",
