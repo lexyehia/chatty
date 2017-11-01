@@ -4,7 +4,7 @@ export interface IMessage {
     username?:     string,
     colour?:       string,
     content:       string,
-    [key: string]: string,
+    key?:          string,
     type:          string
 }
 
@@ -26,6 +26,6 @@ export interface IMessageProps extends React.Props<any> {
     username?: string,
     colour?:   string,
     content:   string,
-    key:       number,
+    key:       string,
     type:      string
 }
