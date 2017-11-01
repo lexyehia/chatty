@@ -7,7 +7,7 @@
     "start": "npm-run-all --parallel client:run server:run",
     "client:run": "node ./client/server",
     "server:run": "nodemon -e ts -w ./server/src -x npm run server:serve",
-    "server:serve": "ts-node server/src/app.ts"
+    "server:serve": "node server/bin/app"
   },
   "repository": {
     "type": "git",
@@ -32,11 +32,13 @@
     "node": ">=6.0.0"
   },
   "devDependencies": {
+    "@types/core-js": "^0.9.43",
     "@types/express": "^4.0.39",
     "@types/morgan": "^1.7.35",
     "@types/node": "^8.0.47",
     "@types/react": "^16.0.19",
     "@types/react-dom": "^16.0.2",
+    "@types/superagent": "^3.5.6",
     "@types/uuid": "^3.4.3",
     "@types/ws": "^3.2.0",
     "awesome-typescript-loader": "^3.2.3",
@@ -64,6 +66,7 @@
     "nodemon": "^1.12.1",
     "react": "15.4.2",
     "react-dom": "15.4.2",
+    "superagent": "^3.8.0",
     "ts-loader": "^3.1.1",
     "uuid": "^3.1.0",
     "ws": "^3.2.0"

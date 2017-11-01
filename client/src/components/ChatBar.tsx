@@ -3,6 +3,7 @@ import * as React from 'react'
 export interface ChatBarProps extends React.Props<any> {
     currentUser: string,
     onSubmit: (input: string) => void 
+    onUserChange: (input: string) => void
 }
 
 export class ChatBar extends React.Component<ChatBarProps, any> {
@@ -10,7 +11,8 @@ export class ChatBar extends React.Component<ChatBarProps, any> {
         super(props)
 
         this.state = {
-            message: ""
+            message: "",
+            currentUser: this.props.currentUser
         }
     }
 
@@ -19,7 +21,9 @@ export class ChatBar extends React.Component<ChatBarProps, any> {
             <footer className="chatbar">
                 <input className="chatbar-username"
                     placeholder="Your name (optional)"
-                    defaultValue={this.props.currentUser}
+                    defaultValue={this.state.currentUser}
+                    onChange={this._inputNameChange}
+                    onKeyPress={this._submitNameChange}
                 />
                 <input className="chatbar-message"
                     placeholder="Type a message and hit ENTER"
@@ -29,6 +33,18 @@ export class ChatBar extends React.Component<ChatBarProps, any> {
                 />
             </footer>
         )
+    }
+
+    _inputNameChange = (e: any) => {
+        this.setState({
+            currentUser: e.target.value
+        })
+    }
+
+    _submitNameChange = (e: any) => {
+        if (e.key === 'Enter') {
+            this.props.onUserChange(this.state.currentUser)
+        } 
     }
 
     _inputChange = (e: any) => {
@@ -43,8 +59,6 @@ export class ChatBar extends React.Component<ChatBarProps, any> {
             this.setState({
                 message: ""
             })
-        } else {
-            return
-        }
+        } 
     }
 }

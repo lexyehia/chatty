@@ -15,7 +15,11 @@ export class MessageList extends React.Component<MessageListProps, any> {
         const _arr = [];
 
         for (let message of this.props.messages) {
-            _arr.push(<Message key={message.key} username={message.username} content={message.content} />)
+            _arr.push(<Message key={message.key}
+                username={message.username}
+                content={message.content}
+                type={message.type}
+                colour={message.colour} />)
         }
         
         return _arr

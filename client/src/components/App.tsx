@@ -3,16 +3,25 @@ import { MessageList, MessageListProps } from './MessageList'
 import { Nav } from './Nav'
 import { ChatBar } from './ChatBar'
 
+interface Message {
+    id?: string,
+    user?: string,
+    content: string,
+    type: string,
+    colour: string
+}
+
 export class App extends React.Component<any, any> {
 
     socket: WebSocket
 
-    constructor(props: any) {
+    constructor(props: React.Props<any>) {
         super(props)
 
         this.state = {
-            currentUser: "bob",
-            messages: []
+            currentUser: "Bob",
+            messages: [],
+            userCount: "0"
         }
     }
 
@@ -22,36 +31,68 @@ export class App extends React.Component<any, any> {
         this.socket = new WebSocket("ws://localhost:3001")
 
         this.socket.addEventListener('message', (event) => {
-            this._processMessageFromServer(event.data)
+            this._parseMessageFromServer(event.data)
         })
     }
 
     render(): JSX.Element {
         return (
             <section>
-            <Nav />
-            <MessageList messages={this.state.messages} />
-            <ChatBar currentUser={this.state.currentUser} onSubmit={this._captureInputFromChat} />
+                <Nav users={this.state.userCount} />
+                <MessageList messages={this.state.messages} />
+                <ChatBar
+                    currentUser={this.state.currentUser}
+                    onSubmit={this._captureInputFromChat}
+                    onUserChange={this._changeUserName}
+                />
             </section>
-        );
+        )
     }
 
     _captureInputFromChat = (input: string) => {
         this.socket.send(JSON.stringify({
             user:    this.state.currentUser,
-            message: input
+            content: input,
+            type:    "user"
         }))
     }
 
-    _processMessageFromServer(data: string) {
-        const input: any = JSON.parse(data) 
+    _changeUserName = (input: string): void => {
+        this.socket.send(JSON.stringify({
+            type: "system",
+            content: `${this.state.currentUser} has changed their name to ${input}`
+        }))
 
+        this.setState({
+            currentUser: input
+        })
+    }
+
+    _parseMessageFromServer = (data: string) => {
+        const input: Message = JSON.parse(data) 
+
+        if (input.type === "count") {
+            this._processUserCountChange(input)
+        } else {
+            this._processChatMessage(input)
+        }
+    }
+
+    _processChatMessage  = (input: Message) => {
         this.setState((prevState: any) => {
             prevState.messages.push({
-                username: input.user,
-                content:  input.message,
-                key:      input.id
+                username: input.user || "",
+                content: input.content,
+                key: input.id,
+                type: input.type,
+                colour: input.colour || "000000"
             })
+        })
+    }
+
+    _processUserCountChange = (input: Message) => {
+        this.setState({
+            userCount: input.content
         })
     }
 }
