@@ -36,7 +36,7 @@ export class App extends React.Component<any, any> {
 
     /**
      * Render component to virtual DOM
-     * @type {JSX.Element}
+     * @return {JSX.Element}
      */
     render(): JSX.Element {
         return (
@@ -55,7 +55,7 @@ export class App extends React.Component<any, any> {
     /**
      * App method that is passed on to ChatBar component, to report back
      * on user chat input. Then send that input via WebSocket to server
-     *
+     * @param {string} input string from chat field
      */
     _captureInputFromChat = (input: string): void => {
         const message: IMessage = {
@@ -89,7 +89,7 @@ export class App extends React.Component<any, any> {
     /**
      * Parse JSON received from server via WebSocket, and triage it
      * depending on its type.
-     * @param  {[string]} data JSON
+     * @param  {string} data JSON
      */
     _parseMessageFromServer = (data: string): void => {
         const input: IMessage = JSON.parse(data)
@@ -111,7 +111,7 @@ export class App extends React.Component<any, any> {
 
     /**
      * Push messages (type 'user' and 'system') to the App's messages state
-     * @param  {[IMessage]} input server message
+     * @param  {IMessage} input server message
      */
     _processChatMessage = (input: IMessage): void => {
         this.setState((prevState: any) => {
@@ -121,7 +121,7 @@ export class App extends React.Component<any, any> {
 
     /**
      * Push messages (type 'count') to the App's userCount state
-     * @param {[IMessage]} input server message
+     * @param {IMessage} input server message
      */
     _processUserCountChange = (input: IMessage): void => {
         this.setState({

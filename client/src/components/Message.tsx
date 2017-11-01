@@ -10,13 +10,19 @@ export class Message extends React.Component<IMessageProps, any> {
         this.state = {
             content: this.props.content
         }
-
     }
 
+    /**
+     * If message is from a user, pass it through _pluckImagesFromContent()
+     */
     componentDidMount() {
         this.props.type === "user" && this._pluckImagesFromContent()
     }
 
+    /**
+     * Render component to virtual DOM
+     * @return {JSX.Element} [description]
+     */
     render() {
         if (this.props.type === "system") {
             return this._renderSystemMessage()
@@ -25,6 +31,10 @@ export class Message extends React.Component<IMessageProps, any> {
         }
     }
 
+    /**
+     * Render system message element to virtual DOM
+     * @return {JSX.Element}
+     */
     _renderSystemMessage() {
         return (
             <div className="message system">
@@ -33,45 +43,56 @@ export class Message extends React.Component<IMessageProps, any> {
         )
     }
 
+    /**
+     * Render user message element to virtual DOM
+     * @return {JSX.Element}
+     */
     _renderUserMessage() {
         const styles = {
             color: `#${this.props.colour}`
-        } 
+        }
 
         return (
             <div className="message">
                 <span className="message-username" style={styles}>{this.props.username}</span>
-                <span className="message-content">{this.state.content}{...this._renderImages()}</span> 
+                <span className="message-content">{this.state.content}{...this._renderImages()}</span>
             </div>
         )
     }
 
-    _pluckImagesFromContent() {
-        const regex = /(http|ftp|https):\/\/([\w_ -]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?(.jpg|.png|.gif)/gi
+    /**
+     * Sweep message content for image urls, removing them from content string
+     * and adding them to images state (to be rendered by _renderImages())
+     */
+    _pluckImagesFromContent(): void {
+        const regex = /(http|https):\/\/([\w_ -]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?(.jpg|.png|.gif)/gi
         const images: Array<string> = this.props.content.match(regex)
         this.setState({
             content: this.props.content.replace(regex, ''),
-            images: images || null
+            images
         })
     }
 
-    _renderImages() {
+    /**
+     * Renders each image url in the images state array as a separate <img />
+     * element right after the content string output
+     * @return {JSX.Element[]}
+     */
+    _renderImages(): JSX.Element[] {
         if (!this.state.images || this.state.images.length === 0) {
             return
         }
 
+        const _elems: JSX.Element[] = []
+
         const styles = {
-            maxWidth: '60%',
+            maxWidth:  '60%',
             maxHeight: '60%'
         }
 
-        let _elems: JSX.Element[] = []
-
-        this.state.images.forEach((image: string, i: number) => {
-            const key = i.toString()
-
+        this.state.images.forEach((image: string, index: number): void => {
             _elems.push(
-                <p key={key}><img src={image} style={styles} /></p>
+                <p key={index.toString()}><img src={image} style={styles} /></p>
             )
         })
 
