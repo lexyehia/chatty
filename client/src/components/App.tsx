@@ -4,11 +4,11 @@ import { Nav } from './Nav'
 import { ChatBar } from './ChatBar'
 
 interface Message {
-    id?: string,
-    user?: string,
+    id?:     string,
+    user?:   string,
     content: string,
-    type: string,
-    colour: string
+    type:    string,
+    colour:  string
 }
 
 export class App extends React.Component<any, any> {
@@ -20,8 +20,8 @@ export class App extends React.Component<any, any> {
 
         this.state = {
             currentUser: "Bob",
-            messages: [],
-            userCount: "0"
+            messages:    [],
+            userCount:   "0"
         }
     }
 
@@ -30,9 +30,9 @@ export class App extends React.Component<any, any> {
 
         this.socket = new WebSocket("ws://localhost:3001")
 
-        this.socket.addEventListener('message', (event) => {
+        this.socket.onmessage = (event) => {
             this._parseMessageFromServer(event.data)
-        })
+        }
     }
 
     render(): JSX.Element {
@@ -50,6 +50,7 @@ export class App extends React.Component<any, any> {
     }
 
     _captureInputFromChat = (input: string) => {
+        console.log(input)
         this.socket.send(JSON.stringify({
             user:    this.state.currentUser,
             content: input,

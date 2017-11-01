@@ -2,11 +2,11 @@ import * as React from 'react'
 import * as request from 'superagent'
 
 export interface MessageProps extends React.Props<any> {
-    username?:   string,
-    colour?: string,
-    content:     string,
-    key:         number,
-    type:        string
+    username?: string,
+    colour?:   string,
+    content:   string,
+    key:       number,
+    type:      string
 }
 
 export class Message extends React.Component<MessageProps, any> {
@@ -48,8 +48,7 @@ export class Message extends React.Component<MessageProps, any> {
         return (
             <div className="message">
                 <span className="message-username" style={styles}>{this.props.username}</span>
-                <span className="message-content"><p>{this.state.content}</p>{...this._renderImages()}</span>
-                
+                <span className="message-content">{this.state.content}{...this._renderImages()}</span> 
             </div>
         )
     }
