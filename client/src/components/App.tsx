@@ -5,47 +5,28 @@ import { ChatBar } from './ChatBar'
 
 export class App extends React.Component<any, any> {
 
+    socket: WebSocket
+
     constructor(props: any) {
         super(props)
 
         this.state = {
             currentUser: "bob",
-            messages: [
-                {
-                    username: "Bob",
-                    content:  "Has anyone seen my marbles?",
-                    key:      1
-                },
-                {
-                    username: "Anonymous",
-                    content:  "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
-                    key:      2
-                }
-            ]
+            messages: []
         }
     }
 
     componentDidMount() {
-        console.log("componentDidMount <App />");
+        console.log("componentDidMount <App />")
 
-        setTimeout(() => {
-            console.log("Simulating incoming message");
-            // Add a new message to the list of messages in the data store
-            const newMessage = {
-                key:      3,
-                username: "Michelle",
-                content:  "Hello there!"
-            }
+        this.socket = new WebSocket("ws://localhost:3001")
 
-            const messages = this.state.messages.concat(newMessage)
-            // Update the state of the app component.
-            // Calling setState will trigger a call to render() in App and all child components.
-            this.setState({ messages })
-
-        }, 3000);
+        this.socket.addEventListener('message', (event) => {
+            this._processMessageFromServer(event.data)
+        })
     }
 
-    render() {
+    render(): JSX.Element {
         return (
             <section>
             <Nav />
@@ -56,11 +37,20 @@ export class App extends React.Component<any, any> {
     }
 
     _captureInputFromChat = (input: string) => {
+        this.socket.send(JSON.stringify({
+            user:    this.state.currentUser,
+            message: input
+        }))
+    }
+
+    _processMessageFromServer(data: string) {
+        const input: any = JSON.parse(data) 
+
         this.setState((prevState: any) => {
             prevState.messages.push({
-                username: this.state.currentUser,
-                content:  input,
-                key:      prevState.messages.length + 1
+                username: input.user,
+                content:  input.message,
+                key:      input.id
             })
         })
     }
