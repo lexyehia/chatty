@@ -6,6 +6,10 @@ import { IMessage } from '../interfaces/chatroom'
 
 export class App extends React.Component<any, any> {
 
+    /**
+     * Instance Property to store the socket connection
+     * @type {WebSocket}
+     */
     socket: WebSocket
 
     constructor(props: React.Props<any>) {
@@ -18,16 +22,22 @@ export class App extends React.Component<any, any> {
         }
     }
 
-    componentDidMount() {
-        console.log("componentDidMount <App />")
-
+    /**
+     * Connect to WebSocket server on mount, store connection
+     * on this.socket property
+     */
+    componentDidMount(): void {
         this.socket = new WebSocket("ws://localhost:3001")
 
-        this.socket.onmessage = (event) => {
-            this._parseMessageFromServer(event.data)
+        this.socket.onmessage = (e): void => {
+            this._parseMessageFromServer(e.data)
         }
     }
 
+    /**
+     * Render component to virtual DOM
+     * @type {JSX.Element}
+     */
     render(): JSX.Element {
         return (
             <section>
@@ -42,6 +52,11 @@ export class App extends React.Component<any, any> {
         )
     }
 
+    /**
+     * App method that is passed on to ChatBar component, to report back
+     * on user chat input. Then send that input via WebSocket to server
+     *
+     */
     _captureInputFromChat = (input: string): void => {
         const message: IMessage = {
             type:     "user",
@@ -52,6 +67,12 @@ export class App extends React.Component<any, any> {
         this.socket.send(JSON.stringify(message))
     }
 
+    /**
+     * App method that is passed on to ChatBar component, to report back
+     * on username change input. Then send that input via WebSocket to server
+     * and immediately change App state to reflect new username
+     * @param {string} input string from username field
+     */
     _changeUserName = (input: string): void => {
         const message: IMessage = {
             type: "system",
@@ -65,6 +86,11 @@ export class App extends React.Component<any, any> {
         })
     }
 
+    /**
+     * Parse JSON received from server via WebSocket, and triage it
+     * depending on its type.
+     * @param  {[string]} data JSON
+     */
     _parseMessageFromServer = (data: string): void => {
         const input: IMessage = JSON.parse(data)
 
@@ -80,17 +106,24 @@ export class App extends React.Component<any, any> {
                 break
             default:
                 break
-
         }
     }
 
-    _processChatMessage = (input: IMessage) => {
+    /**
+     * Push messages (type 'user' and 'system') to the App's messages state
+     * @param  {[IMessage]} input server message
+     */
+    _processChatMessage = (input: IMessage): void => {
         this.setState((prevState: any) => {
             prevState.messages.push(input)
         })
     }
 
-    _processUserCountChange = (input: IMessage) => {
+    /**
+     * Push messages (type 'count') to the App's userCount state
+     * @param {[IMessage]} input server message
+     */
+    _processUserCountChange = (input: IMessage): void => {
         this.setState({
             userCount: input.content
         })
