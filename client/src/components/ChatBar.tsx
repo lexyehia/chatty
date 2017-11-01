@@ -12,6 +12,10 @@ export class ChatBar extends React.Component<IChatBarProps, any> {
         }
     }
 
+    /**
+     * Render component to virtual DOM
+     * @return {JSX.Element}
+     */
     render(): JSX.Element {
         return (
             <footer className="chatbar">
@@ -31,25 +35,43 @@ export class ChatBar extends React.Component<IChatBarProps, any> {
         )
     }
 
-    _inputNameChange = (e: any) => {
+    /**
+     * Mirror username field to state, to be redisplayed to user
+     * @param  {[React.ChangeEvent]} e
+     */
+    _inputNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            currentUser: e.target.value
+            currentUser: (e.target as HTMLInputElement).value
         })
     }
 
-    _submitNameChange = (e: any) => {
+    /**
+     * On new username submission with ENTER key, call onUserChange() prop
+     * to change the currentUser state of higher App component
+     * @param  {[React.KeyboardEvent]} e
+     */
+    _submitNameChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             this.props.onUserChange(this.state.currentUser)
         }
     }
 
-    _inputChange = (e: any) => {
+    /**
+     * Mirror (chat) input field to state, to be redisplayed to user
+     * @param  {[React.ChangeEvent]} e
+     */
+    _inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({
-            message: e.target.value
+            message: (e.target as HTMLInputElement).value
         })
     }
 
-    _submitChange = (e: any) => {
+    /**
+     * On new message submission with ENTER key, call onSubmit() prop
+     * to transmit the message to higher App component, then clear input field
+     * @param  {[React.KeyboardEvent]} e
+     */
+    _submitChange = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             this.props.onSubmit(this.state.message)
             this.setState({

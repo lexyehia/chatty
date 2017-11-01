@@ -7,7 +7,11 @@ export class Nav extends React.Component<INavProps, any> {
         super(props)
     }
 
-    render() {
+    /**
+     * Render component to virtual DOM
+     * @return {JSX.Element}
+     */
+    render(): JSX.Element {
         return (
             <nav className="navbar">
                 <a href="/" className="navbar-brand">Chatty</a>
@@ -16,7 +20,12 @@ export class Nav extends React.Component<INavProps, any> {
         )
     }
 
-    _userCountString() {
+    /**
+     * Create user count string to be displayed on 
+     * the right side of the navbar
+     * @return {[string]}
+     */
+    _userCountString(): string {
         let users
         this.props.users === "1" ? users = "user" : users = "users"
 
