@@ -1,20 +1,10 @@
 import * as React from 'react'
+import { INavProps } from '../interfaces/chatroom'
 
-export interface NavProps extends React.Props<any> {
-    users: string
-}
+export class Nav extends React.Component<INavProps, any> {
 
-export class Nav extends React.Component<NavProps, any> {
-
-    constructor(props: NavProps) {
+    constructor(props: INavProps) {
         super(props)
-    }
-
-    _userCountString() {
-        let users
-        this.props.users === "1" ? users = "user" : users = "users"
-        
-        return `${this.props.users} ${users} online`
     }
 
     render() {
@@ -24,5 +14,12 @@ export class Nav extends React.Component<NavProps, any> {
                 <div className="navbar-user-counter">{this._userCountString()}</div>
             </nav>
         )
+    }
+
+    _userCountString() {
+        let users
+        this.props.users === "1" ? users = "user" : users = "users"
+
+        return `${this.props.users} ${users} online`
     }
 }

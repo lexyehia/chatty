@@ -1,17 +1,10 @@
 import * as React from 'react'
 import * as request from 'superagent'
+import { IMessageProps } from '../interfaces/chatroom'
 
-export interface MessageProps extends React.Props<any> {
-    username?: string,
-    colour?:   string,
-    content:   string,
-    key:       number,
-    type:      string
-}
+export class Message extends React.Component<IMessageProps, any> {
 
-export class Message extends React.Component<MessageProps, any> {
-
-    constructor(props: MessageProps) {
+    constructor(props: IMessageProps) {
         super(props)
 
         this.state = {

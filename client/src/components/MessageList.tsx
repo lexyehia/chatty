@@ -1,13 +1,10 @@
 import * as React from 'react'
-import { Message, MessageProps } from './Message'
+import { IMessageListProps } from '../interfaces/chatroom'
+import { Message } from './Message'
 
-export interface MessageListProps extends React.Props<any> {
-    messages: Array<MessageProps>
-}
+export class MessageList extends React.Component<IMessageListProps, any> {
 
-export class MessageList extends React.Component<MessageListProps, any> {
-
-    constructor(props: MessageListProps) {
+    constructor(props: IMessageListProps) {
         super(props)
     }
 

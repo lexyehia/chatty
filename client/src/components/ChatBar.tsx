@@ -1,17 +1,13 @@
 import * as React from 'react'
+import { IChatBarProps } from '../interfaces/chatroom'
 
-export interface ChatBarProps extends React.Props<any> {
-    currentUser: string,
-    onSubmit: (input: string) => void 
-    onUserChange: (input: string) => void
-}
+export class ChatBar extends React.Component<IChatBarProps, any> {
 
-export class ChatBar extends React.Component<ChatBarProps, any> {
-    constructor(props: ChatBarProps) {
+    constructor(props: IChatBarProps) {
         super(props)
 
         this.state = {
-            message: "",
+            message:     "",
             currentUser: this.props.currentUser
         }
     }
@@ -44,7 +40,7 @@ export class ChatBar extends React.Component<ChatBarProps, any> {
     _submitNameChange = (e: any) => {
         if (e.key === 'Enter') {
             this.props.onUserChange(this.state.currentUser)
-        } 
+        }
     }
 
     _inputChange = (e: any) => {
@@ -59,6 +55,6 @@ export class ChatBar extends React.Component<ChatBarProps, any> {
             this.setState({
                 message: ""
             })
-        } 
+        }
     }
 }

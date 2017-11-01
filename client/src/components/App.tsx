@@ -1,15 +1,8 @@
 import * as React from 'react'
-import { MessageList, MessageListProps } from './MessageList'
+import { MessageList } from './MessageList'
 import { Nav } from './Nav'
 import { ChatBar } from './ChatBar'
-
-interface Message {
-    id?:     string,
-    user?:   string,
-    content: string,
-    type:    string,
-    colour:  string
-}
+import { IMessage } from '../interfaces/chatroom'
 
 export class App extends React.Component<any, any> {
 
@@ -49,49 +42,55 @@ export class App extends React.Component<any, any> {
         )
     }
 
-    _captureInputFromChat = (input: string) => {
-        console.log(input)
-        this.socket.send(JSON.stringify({
-            user:    this.state.currentUser,
-            content: input,
-            type:    "user"
-        }))
+    _captureInputFromChat = (input: string): void => {
+        const message: IMessage = {
+            type:     "user",
+            username: this.state.currentUser,
+            content:  input
+        }
+
+        this.socket.send(JSON.stringify(message))
     }
 
     _changeUserName = (input: string): void => {
-        this.socket.send(JSON.stringify({
+        const message: IMessage = {
             type: "system",
             content: `${this.state.currentUser} has changed their name to ${input}`
-        }))
+        }
+
+        this.socket.send(JSON.stringify(message))
 
         this.setState({
             currentUser: input
         })
     }
 
-    _parseMessageFromServer = (data: string) => {
-        const input: Message = JSON.parse(data) 
+    _parseMessageFromServer = (data: string): void => {
+        const input: IMessage = JSON.parse(data)
 
-        if (input.type === "count") {
-            this._processUserCountChange(input)
-        } else {
-            this._processChatMessage(input)
+        switch (input.type) {
+            case "count":
+                this._processUserCountChange(input)
+                break
+            case "user":
+                this._processChatMessage(input)
+                break
+            case "system":
+                this._processChatMessage(input)
+                break
+            default:
+                break
+
         }
     }
 
-    _processChatMessage  = (input: Message) => {
+    _processChatMessage = (input: IMessage) => {
         this.setState((prevState: any) => {
-            prevState.messages.push({
-                username: input.user || "",
-                content: input.content,
-                key: input.id,
-                type: input.type,
-                colour: input.colour || "000000"
-            })
+            prevState.messages.push(input)
         })
     }
 
-    _processUserCountChange = (input: Message) => {
+    _processUserCountChange = (input: IMessage) => {
         this.setState({
             userCount: input.content
         })
