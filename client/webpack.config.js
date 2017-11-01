@@ -4,7 +4,8 @@ var webpack = require('webpack');
 module.exports = {
     devtool: 'eval',
     entry: [
-        'webpack-dev-server/client?http://localhost:3000', './src/index.tsx'
+        'webpack-dev-server/client?http://localhost:3000',
+        path.join(__dirname, './src/index.tsx')
     ],
     output: {
         path: path.join(__dirname, 'dist'),
@@ -14,18 +15,21 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.tsx?$/,
+                loader: 'ts-loader'
+            },
+            {
                 test: /\.jsx?$/,
                 loader: 'babel-loader',
                 include: path.join(__dirname, 'src')
             }, {
                 test: /\.scss$/,
                 use: ['style-loader', 'css-loader', 'sass-loader']
-            }, {
-                test: /\.tsx?$/,
-                loader: 'ts-loader',
-                include: path.join(__dirname, 'src')
             }
-
         ]
+    },
+    resolve: {
+        // Add '.ts' and '.tsx' as resolvable extensions.
+        extensions: ['.ts', '.tsx', '.js', '.json']
     }
 };

@@ -4,9 +4,10 @@
   "description": "Simple and lightweight Boilerplate for ReactJS projects",
   "scripts": {
     "lint": "eslint --ext .jsx,.js src",
-    "start": "npm-run-all --parallel watch:server watch:build",
-    "watch:build": "webpack",
-    "watch:server": "nodemon \"./server/bin/www\" --watch \"./server/bin\""
+    "start": "npm-run-all --parallel client:run server:run",
+    "client:run": "node ./client/server",
+    "server:run": "nodemon -e ts -w ./server/src -x npm run server:serve",
+    "server:serve": "ts-node server/src/app.ts"
   },
   "repository": {
     "type": "git",
@@ -45,6 +46,7 @@
     "css-loader": "0.26.1",
     "eslint": "3.15.0",
     "eslint-plugin-react": "6.9.0",
+    "morgan": "^1.9.0",
     "node-sass": "4.5.0",
     "npm-run-all": "^4.1.1",
     "sass-loader": "6.0.0",

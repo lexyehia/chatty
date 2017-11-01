@@ -1,0 +1,15 @@
+{
+    "compileOnSave": true,    
+    "compilerOptions": {
+        "outFile": "./bin/app.js",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "system",
+        "target": "es6",
+        "jsx": "react",
+        "inlineSourceMap": true
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
