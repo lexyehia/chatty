@@ -25,7 +25,7 @@ class ChatSocketServer extends WebSocket.Server {
         };
         /**
          * Process incoming messages, assigning them unique IDs and a colour
-         * from the userColours Map
+         * from the userColours Map, send copy to Redis for cache, then broadcast
          * @param  {string} json incoming message
          * @param  {http.IncomingMessage} req
          */
