@@ -3,5 +3,6 @@ export interface IMessage {
     colour?:       string,
     content:       string,
     key?:          string,
-    type:          string
+    type:          string,
+    date?:         Date
 }

@@ -2,7 +2,7 @@ import { IMessage } from './../interfaces/app'
 import * as http from 'http'
 import * as WebSocket from 'ws'
 import * as uuid from 'uuid/v4'
-
+import * as Redis from 'redis'
 
 export default class ChatSocketServer extends WebSocket.Server {
 
@@ -10,6 +10,7 @@ export default class ChatSocketServer extends WebSocket.Server {
      * Map to store our user/colour combinations
      */
     userColours: Map<string, string> = new Map()
+    redis: Redis.RedisClient = Redis.createClient("redis://h:p8662b73d62497ac7a30d476f50cb6b4eab0198aff78fd03127765c508a4eda59@ec2-34-199-160-190.compute-1.amazonaws.com:36509")
 
     /**
      * Socket event listeners
@@ -18,6 +19,7 @@ export default class ChatSocketServer extends WebSocket.Server {
         this.on('connection', (ws: WebSocket, req: http.IncomingMessage) => {
             this.assignUniqueColour(req)
             this.broadcastUserCount()
+            this.sendChatHistory(ws)
             ws.on('message', (data: string) => this.processMessage(data, req))
             ws.on('close', this.broadcastUserCount)
         })
@@ -33,8 +35,11 @@ export default class ChatSocketServer extends WebSocket.Server {
         const message: IMessage = JSON.parse(json)
         message.key    = uuid()
         message.colour = this.userColours.get(req.socket.remoteAddress)
-
-        this.broadcast(message)
+        this.redis.zadd("msgset", Date.now(), JSON.stringify(message),
+        (err, resp) => {
+            if (err) console.log(err)
+            this.broadcast(message)
+        })
     }
 
     /**
@@ -77,5 +82,14 @@ export default class ChatSocketServer extends WebSocket.Server {
 
             this.userColours.set(req.socket.remoteAddress, colours[i])
         }
+    }
+
+    sendChatHistory(client: WebSocket) {
+        const fiveDaysAgo: number = Date.now() - (2 * 24 * 60 * 60 * 1000)
+        this.redis.zrange("msgset", -10, -1, (err, messages) => {
+            if (err) console.log(err)
+            console.log(messages)
+            messages.forEach(msg => client.send(msg))
+        })
     }
 }
