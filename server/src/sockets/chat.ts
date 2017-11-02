@@ -10,7 +10,7 @@ export default class ChatSocketServer extends WebSocket.Server {
      * Map to store our user/colour combinations
      */
     userColours: Map<string, string> = new Map()
-    redis: Redis.RedisClient = Redis.createClient("redis://h:p8662b73d62497ac7a30d476f50cb6b4eab0198aff78fd03127765c508a4eda59@ec2-34-199-160-190.compute-1.amazonaws.com:36509")
+    redis: Redis.RedisClient = Redis.createClient(process.env.REDIS_URL)
 
     /**
      * Socket event listeners
@@ -84,12 +84,16 @@ export default class ChatSocketServer extends WebSocket.Server {
         }
     }
 
+    /**
+     * Send last 10 cached messages to newly-connected clients
+     * @param  {WebSocket} client
+     */
     sendChatHistory(client: WebSocket) {
-        const fiveDaysAgo: number = Date.now() - (2 * 24 * 60 * 60 * 1000)
-        this.redis.zrange("msgset", -10, -1, (err, messages) => {
+        this.redis.zrange("msgset", -10, -1,
+        (err: Error, msgs: string[]) => {
             if (err) console.log(err)
-            console.log(messages)
-            messages.forEach(msg => client.send(msg))
+            const msgHistory: IMessage[] = msgs.map(m => JSON.parse(m))
+            client.send(JSON.stringify(msgHistory))
         })
     }
 }

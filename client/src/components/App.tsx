@@ -88,22 +88,33 @@ export class App extends React.Component<any, any> {
     }
 
     /**
-     * Parse JSON received from server via WebSocket, and triage it
-     * depending on its type.
+     * Parse JSON received from server via WebSocket
      * @param  {string} data JSON
      */
     _parseMessageFromServer = (data: string): void => {
-        const input: IMessage = JSON.parse(data)
+        const input: IMessage|Array<IMessage> = JSON.parse(data)
 
-        switch (input.type) {
+        if (Array.isArray(input)) {
+            input.forEach(msg => this._sortMessageFromServer(msg))
+        } else {
+            this._sortMessageFromServer(input)
+        }
+    }
+
+    /**
+     * Triage server messages depending on type to the appropriate function
+     * @param  {IMessage} msg
+     */
+    _sortMessageFromServer(msg: IMessage) {
+        switch (msg.type) {
             case "count":
-                this._processUserCountChange(input)
+                this._processUserCountChange(msg)
                 break
             case "user":
-                this._processChatMessage(input)
+                this._processChatMessage(msg)
                 break
             case "system":
-                this._processChatMessage(input)
+                this._processChatMessage(msg)
                 break
             default:
                 break
