@@ -5,6 +5,8 @@ A Next-Generation Chat Room
 
 ### Layout
 
+Live version of this app at https://cy-chatty.herokuapp.com
+
 This chat app is written in TypeScript on both front and back ends. The
 project is neatly divided into `client` and `server` subdirectories. Within each, the TypeScript source is found in the `src` directory, while the transpiled JavaScript is emitted to the `dist` directory.
 
