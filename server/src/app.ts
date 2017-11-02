@@ -14,7 +14,7 @@ const app: any = express()
 app.use('/public', express.static('./client/dist'))
 
 app.get('/', (req: any, res: any) => {
-    res.sendFile('../../index.html');
+    res.redirect('/public/index.html')
 })
 
 
