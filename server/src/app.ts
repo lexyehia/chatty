@@ -14,7 +14,7 @@ const app: any = express()
 app.use('/public', express.static('./client/dist'))
 
 app.get('/', (req: any, res: any) => {
-    res.sendFile(path.join(__dirname + '../../index.html'));
+    res.sendFile('../../index.html');
 })
 
 
