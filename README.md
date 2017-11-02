@@ -3,43 +3,26 @@ React Boilerplate
 
 A minimal and light dev environment for ReactJS.
 
-### Usage
+### Layout
 
-Clone the boilerplate and create your own git repo.
+This is a version of the Chatter app written in TypeScript on both front and back ends. The
+project is neatly divided into `client` and `server` subdirectories. Within each, the TypeScript source is found in the `src` directory, while the transpiled JavaScript is emitted to the `dist` directory.
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+### Start
 
-Install the dependencies and start the server.
+The TypeScript is already transpiled (using WebPack for the client-side, and the regular tsc for the server-side). A simple `npm install` followed by `npm start` will run parallel processes of both client and server servers (yes, that's TWO servers!). You do not need to open a new terminal tab/window.
 
-```
-npm install
-npm start
-open http://localhost:3000
-```
+If you need to recompile the server TypeScript code, `npm run compile` will take care of that (However, WebPack deals with the client-side transpilation).
 
-### Static Files
+### Features
 
-You can store static files like images, fonts, etc in the `build` folder.
+##### Live Chat
 
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
+The 
 
 ### Dependencies
 
 * React
 * Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
+* tsc (TypeScript Compiler)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)

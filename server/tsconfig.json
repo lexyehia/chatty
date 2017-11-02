@@ -1,11 +1,10 @@
 {
-    "compileOnSave": true,    
+    "compileOnSave": true,
     "compilerOptions": {
-        "outDir": "./bin/",
+        "outDir": "./dist/",
         "noImplicitAny": true,
         "module": "commonjs",
         "target": "es6",
-        "jsx": "react",
         "inlineSourceMap": true
     },
     "include": [

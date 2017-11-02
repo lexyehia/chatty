@@ -14,7 +14,7 @@ export default class ChatSocketServer extends WebSocket.Server {
     /**
      * Socket event listeners
      */
-    startListening = (): void => {
+    listen = (): void => {
         this.on('connection', (ws: WebSocket, req: http.IncomingMessage) => {
             this.assignUniqueColour(req)
             this.broadcastUserCount()
@@ -30,21 +30,23 @@ export default class ChatSocketServer extends WebSocket.Server {
      * @param  {http.IncomingMessage} req
      */
     processMessage = (json: string, req: http.IncomingMessage): void => {
-        let message: IMessage = JSON.parse(json)
+        const message: IMessage = JSON.parse(json)
         message.key    = uuid()
         message.colour = this.userColours.get(req.socket.remoteAddress)
 
-        this.broadcast(JSON.stringify(message))
+        this.broadcast(message)
     }
 
     /**
      * Helper method to broadcast messages to all connected socket clients
      * @param  {string} data
      */
-    broadcast = (data: string): void => {
+    broadcast = (data: object): void => {
+        const jsonData: string = JSON.stringify(data)
+
         this.clients.forEach((client: WebSocket) => {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(data)
+                client.send(jsonData)
             }
         })
     }
@@ -59,7 +61,7 @@ export default class ChatSocketServer extends WebSocket.Server {
             content:  clients.toString()
         }
 
-        this.broadcast(JSON.stringify(message))
+        this.broadcast(message)
     }
 
     /**

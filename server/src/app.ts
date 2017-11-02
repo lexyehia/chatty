@@ -17,8 +17,6 @@ const server: http.Server = express()
 })
 
 /**
- * Initialize a new socket server instance and
- * pass it to the chatroom module
+ * Initialize a new socket server instance
  */
-const chatWSS = new ChatSocketServer({ server })
-    .startListening()
+new ChatSocketServer({ server }).listen()
