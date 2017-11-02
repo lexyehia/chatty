@@ -21,7 +21,7 @@ export class ChatBar extends React.Component<IChatBarProps, any> {
             <footer className="chatbar">
                 <input className="chatbar-username"
                     placeholder="Your name (optional)"
-                    defaultValue={this.state.currentUser}
+                    value={this._hideAnonymous()}
                     onChange={this._inputNameChange}
                     onKeyPress={this._submitNameChange}
                 />
@@ -33,6 +33,17 @@ export class ChatBar extends React.Component<IChatBarProps, any> {
                 />
             </footer>
         )
+    }
+
+    /**
+     * Hide the word "Anonymous" from username input field
+     */
+    _hideAnonymous = () => {
+        if (this.state.currentUser === "Anonymous") {
+            return ""
+        } else {
+            return this.state.currentUser
+        }
     }
 
     /**

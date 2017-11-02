@@ -16,7 +16,7 @@ export class App extends React.Component<any, any> {
         super(props)
 
         this.state = {
-            currentUser: "Bob",
+            currentUser: "Anonymous",
             messages:    [],
             userCount:   "0"
         }
