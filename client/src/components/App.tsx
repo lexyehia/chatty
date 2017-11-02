@@ -27,7 +27,8 @@ export class App extends React.Component<any, any> {
      * on this.socket property
      */
     componentDidMount(): void {
-        this.socket = new WebSocket("ws://localhost:3001")
+        const HOST = location.origin.replace(/^http/, 'ws')
+        this.socket = new WebSocket(HOST)
 
         this.socket.onmessage = (e): void => {
             this._parseMessageFromServer(e.data)
