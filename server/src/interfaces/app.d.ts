@@ -1,7 +1,7 @@
-import { Server as SocketServer } from 'ws'
+import * as WebSocket from 'ws'
 import { Server as HttpServer } from 'http'
 
-export interface ISocketServer extends SocketServer {
+export interface ISocketServer extends WebSocket.Server {
     broadcast?: (data: string) => void
 }
 
@@ -11,10 +11,6 @@ export interface IMessage {
     content:       string,
     [key: string]: string,
     type:          string
-}
-
-export interface IColourMap {
-    [ip: string]:  string
 }
 
 export interface IHttpServer extends HttpServer { }
