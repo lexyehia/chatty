@@ -52,8 +52,8 @@ Not to be outmatched by our competitors, Chatty allows a user to post pictures f
 
 ##### Cached chat history
 
-A newly connected client will receive the 10 last messages posted to the channel, courtesy
-of our state-of-the-art Redis store! 
+ON THE HEROKU/LIVE BRANCH ONLY: A newly connected client will receive the 10 last messages posted to the channel,
+courtesy of our state-of-the-art Redis store!
 
 
 ### Dependencies
