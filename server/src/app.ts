@@ -1,16 +1,15 @@
 import * as express from 'express'
 import * as morgan from 'morgan'
-import { Server as SocketServer } from 'ws'
-import { ISocketServer, IHttpServer } from './interfaces/app'
-import { chatRoomChannel } from './sockets/chat'
+import * as http from 'http'
+import ChatSocketServer from './sockets/chat'
 
 const PORT: number = 3001
 
 /**
  * Initialize our Express http server
- * @return {IHttpServer} server
+ * @return {http.Server} server
  */
-const server: IHttpServer = express()
+const server: http.Server = express()
     .use(morgan('dev'))
     .use('/public', express.static('./client/dist'))
     .listen(PORT, '0.0.0.0', () => {
@@ -21,5 +20,5 @@ const server: IHttpServer = express()
  * Initialize a new socket server instance and
  * pass it to the chatroom module
  */
-const wss: ISocketServer = new SocketServer({ server })
-chatRoomChannel(wss)
+const chatWSS = new ChatSocketServer({ server })
+    .startListening()
